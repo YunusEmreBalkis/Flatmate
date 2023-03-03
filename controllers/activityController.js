@@ -1,7 +1,7 @@
 const Activity = require("../models/Activity");
 const CustomError = require("../errors");
 const { StatusCodes } = require("http-status-codes");
-const { checkPermissions } = require("../utils");
+const { checkPermissions,assetCheck } = require("../utils");
 
 const createActivity = async (req, res) => {
   req.body.author = req.user.userId;
@@ -21,6 +21,7 @@ const getSingleActivity = async (req, res) => {
   const { id: activityId } = req.params;
 
   const activity = await Activity.findOne({ _id: activityId });
+  assetCheck(activity,activityId,"activity");
 
   res.status(StatusCodes.OK).json({ activity });
 };
@@ -29,6 +30,8 @@ const updateActivity = async (req, res) => {
   const { id: activityId } = req.params;
 
   const activity = await Activity.findOne({_id:activityId});
+
+  assetCheck(activity,activityId,"activity");
 
   checkPermissions(req.user,activity.author)
 
@@ -41,11 +44,7 @@ const updateActivity = async (req, res) => {
     }
   );
 
-  if (!activity) {
-    throw new CustomError.NotFoundError(
-      `No activity with that id : ${activityId}`
-    );
-  }
+  
   res.status(StatusCodes.OK).json({ msg: "Success! Activity updated." });
 };
 
@@ -54,11 +53,7 @@ const deleteActivity = async (req, res) => {
 
   const activity = await Activity.findOne({ _id: activityId });
 
-  if (!activity) {
-    throw new CustomError.NotFoundError(
-      `No activity with that id : ${activityId}`
-    );
-  }
+  assetCheck(activity,activityId,"activity");
   checkPermissions(req.user,activity.author)
   await activity.remove();
   res.status(StatusCodes.OK).json({ msg: "Succes! Activity removed" });
@@ -71,12 +66,16 @@ const joinActivity = async (req, res) => {
 
   const activity = await Activity.findOne({ _id: activityId });
 
+  assetCheck(activity,activityId,"activity");
+
   activity.whoAttend.push(user);
 
   activity.save();
 
   res.status(StatusCodes.OK).json({ activity });
 };
+
+
 
 module.exports = {
   createActivity,

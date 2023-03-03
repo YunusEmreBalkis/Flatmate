@@ -1,6 +1,7 @@
 const Dormitory = require("../models/Dormitory");
 const CustomError = require("../errors");
 const { StatusCodes } = require("http-status-codes");
+const { checkPermissions ,assetCheck } = require("../utils")
 
 const createDormitory = async (req, res) => {
   req.body.executive = req.user.userId;
@@ -25,14 +26,17 @@ const getDormitoryById = async (req, res) => {
   const { id: dormitoryId } = req.params;
 
   const dormitory = await Dormitory.findOne({ _id: dormitoryId });
-
+  assetCheck(dormitory,dormitoryId,"dormitory");
   res.status(StatusCodes.OK).json({ dormitory });
 };
 
 const updateDormitory = async (req, res) => {
   const { id: dormitoryId } = req.params;
 
-  const dormitory = await Dormitory.findByIdAndUpdate(
+  const dormitory = await Dormitory.findById({_id:dormitoryId})
+  assetCheck(dormitory,dormitoryId,"dormitory")
+  checkPermissions(req.user,dormitory.executive)
+   await Dormitory.findByIdAndUpdate(
     { _id: dormitoryId },
     req.body,
     {
@@ -40,7 +44,7 @@ const updateDormitory = async (req, res) => {
       runValidators: true,
     }
   );
-  res.status(StatusCodes.OK).json({ dormitory });
+  res.status(StatusCodes.OK).json({ msg: "Succes! Dormitory updated" });
 };
 
 const deleteDormitory = async (req, res) => {
@@ -48,10 +52,8 @@ const deleteDormitory = async (req, res) => {
 
   const dormitory = await Dormitory.findOne({ _id: dormitoryId });
 
-  if (!dormitory) {
-    throw new CustomError.NotFoundError(`No dormitory with that id : ${dormitoryId}`);
-  }
-
+  assetCheck(dormitory,dormitoryId,"dormitory");
+  checkPermissions(req.user,dormitory.executive)
   dormitory.remove();
 
   res.status(StatusCodes.OK).json({ msg: "Succes! Dormitory removed" });

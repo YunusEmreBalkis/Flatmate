@@ -1,18 +1,24 @@
 const Comment = require("../models/Comment");
 const CustomError = require("../errors");
 const { StatusCodes } = require("http-status-codes");
-const { checkPermissions } = require("../utils");
+const { checkPermissions,assetCheck } = require("../utils");
 
 const getAllComments = async (req, res) => {
-  const comment = await Comment.find({});
+  const comment = await Comment.find({}).populate({
+    path: 'post',
+    select: 'content',
+  }).populate({ path: "author", select: "name" });
 
   res.status(StatusCodes.OK).json({ comment });
 };
 const getSingleComments = async (req, res) => {
   const { id: commentId } = req.params;
 
-  const comment = await Comment.findOne({ _id: commentId });
-
+  const comment = await Comment.findOne({ _id: commentId }).populate({
+    path: 'post',
+    select: 'content',
+  });
+  assetCheck(comment,commentId,"comment");
   res.status(StatusCodes.OK).json({ comment });
 };
 const getByPostComments = async (req, res) => {
@@ -30,38 +36,39 @@ const createComment = async (req, res) => {
 };
 const updateComment = async (req, res) => {
   const { id: commentId } = req.params;
-  const comment = await Comment.findByIdAndUpdate(
+  const comment = await Comment.findOne({ _id: commentId });
+  assetCheck(comment,commentId,"comment");
+  checkPermissions(req.user, comment.author);
+   await Comment.findByIdAndUpdate(
     { _id: commentId },
     req.body,
     { new: true, runValidators: true }
   );
 
-  if (!comment) {
-    throw new CustomError.NotFoundError(`No comment with that id ${commentId}`);
-  }
 
-  res.status(StatusCodes.OK).json({ comment });
+  res.status(StatusCodes.OK).json({ msg: "Success! Comment updated." });
 };
 const deleteComments = async (req, res) => {
   const { id: commentId } = req.params;
 
   const comment = await Comment.findOne({ _id: commentId });
-
-  checkPermissions(req.user, comment.user);
+  assetCheck(comment,commentId,"comment");
+  checkPermissions(req.user, comment.author);
   comment.remove();
 
   res.status(StatusCodes.OK).json({ msg: "Success! Comment removed" });
 };
 const likeComments = async (req, res) => {
-  const user = req.user;
+  const user = req.user.userId;
   const { id: commentId } = req.params;
 
   const comment = await Comment.findOne({ _id: commentId });
-
+  assetCheck(comment,commentId,"comment");
   comment.likes.push(user);
   comment.save();
 
-  res.status(StatusCodes.OK).json({ comments });
+  res.status(StatusCodes.OK).json({ comment });
 };
+
 
 module.exports = {getAllComments,getByPostComments,getSingleComments,createComment,updateComment,deleteComments,likeComments}

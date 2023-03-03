@@ -3,8 +3,9 @@ const CustomError = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 const {
   attachCookiesToResponse,
-  createTokenUser,
+  createtokenUser,
   checkPermissions,
+  assetCheck
 } = require("../utils");
 
 const getAllUsers = async (req, res) => {
@@ -14,11 +15,8 @@ const getAllUsers = async (req, res) => {
 
 const getSingleUser = async (req, res) => {
   const user = await User.findOne({ _id: req.params.id }).select("-password");
-  if (!user) {
-    throw new CustomError.NotFoundError(
-      `No user with that id ${req.params.id}`
-    );
-  }
+
+  assetCheck(user,req.params.id,"user")
   checkPermissions(req.user, user._id);
   res.status(StatusCodes.OK).json({ user });
 };
@@ -36,22 +34,24 @@ const updateUser = async (req, res) => {
   }
 
   const user = await User.findOne({ _id: req.user.userId });
+  assetCheck(user,req.user.userId ,"user")
   user.email = email;
   user.name = name;
 
   await user.save();
-  const tokenUser = createTokenUser(user);
+  const tokenUser = createtokenUser(user);
   attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 const updateUserPassword = async (req, res) => {
   const { newPassword, oldPassword } = req.body;
-  if (!newPassword || oldPassword) {
+  if (!newPassword || !oldPassword) {
     throw new CustomError.BadRequestError("Please provide both values");
   }
 
   const user = await User.findOne({ _id: req.user.userId });
+  assetCheck(user,req.user.userId ,"user")
   const isPasswordCorrect = await user.comparePassword(oldPassword);
 
   if (!isPasswordCorrect) {
@@ -66,6 +66,7 @@ const updateUserPassword = async (req, res) => {
 
 const changeUserRole = async (req, res) => {
   const user = await User.findOne({ _id: req.params.id});
+  assetCheck(user,req.params.id,"user")
   const { role } = req.body;
 
   user.role = role;

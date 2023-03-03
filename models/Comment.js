@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const CommentSchema = mongoose.Schema({
     content: {
         type:String,
-        required:[true,"Please provide a title"],
+        required:[true,"Please provide a content"],
         minlength:3,
         maxlength:500
     },

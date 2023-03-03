@@ -1,7 +1,7 @@
 const Post = require("../models/Post");
 const CustomError = require("../errors");
 const { StatusCodes } = require("http-status-codes");
-const { checkPermissions } = require("../utils");
+const { checkPermissions,assetCheck } = require("../utils");
 
 const getAllPosts = async (req, res) => {
   const posts = await Post.find({});
@@ -12,14 +12,15 @@ const getAllPosts = async (req, res) => {
 const getSinglePost = async (req, res) => {
   const { id: postId } = req.params;
 
-  const post = await Post.findOne({ _id: postId });
+  const post = await Post.findOne({ _id: postId }).populate("comments")
+  assetCheck(post,postId,"post")
   res.status(StatusCodes.OK).json({ post });
 };
 
 const getPostByUserId = async (req, res) => {
   const { id: userId } = req.params;
   const posts = await Post.find({ author: userId });
-
+  assetCheck(posts,userId,"user")
   res.status(StatusCodes.OK).json({ posts });
 };
 
@@ -34,16 +35,18 @@ const createPost = async (req, res) => {
 const updatePost = async (req, res) => {
   const { id: postId } = req.params;
 
-  const post = await Post.findByIdAndUpdate({ _id: postId }, req.body, {
+  const post = await Post.findById({_id:postId});
+  
+  assetCheck(post,postId,"post");
+  checkPermissions(req.user, post.author);
+  await Post.findByIdAndUpdate({ _id: postId }, req.body, {
     new: true,
     runValidators: true,
   });
 
-  if (!post) {
-    throw new CustomError.NotFoundError(`No post with that id ${postId}`);
-  }
+  
 
-  res.status(StatusCodes.OK).json({ post });
+  res.status(StatusCodes.OK).json({ msg: "Success! Post updated" });
 };
 
 const deletePost = async (req, res) => {
@@ -51,22 +54,21 @@ const deletePost = async (req, res) => {
 
   const post = await Post.findOne({ _id: postId });
 
-  if (!post) {
-    throw new CustomError.NotFoundError(`No post with that id ${postId}`);
-  }
+  assetCheck(post,postId,"post");
 
-  checkPermissions(req.user, post.user);
+  checkPermissions(req.user, post.author);
   await post.remove();
 
   res.status(StatusCodes.OK).json({ msg: "Success! Post removed" });
 };
 
 const likePost = async (req, res) => {
-  const user = req.user;
+  const user = req.user.userId;
   const { id: postId } = req.params;
 
   const post = await Post.findOne({ _id: postId });
-
+  assetCheck(post,postId,"post");
+  console.log(user)
   post.likes.push(user);
 
   post.save();
