@@ -68,8 +68,15 @@ const likePost = async (req, res) => {
 
   const post = await Post.findOne({ _id: postId });
   assetCheck(post,postId,"post");
-  console.log(user)
-  post.likes.push(user);
+
+  if (post.likes.includes(user)) {
+    post.likes.splice(post.likes.indexOf(user),1)
+  }
+  else{
+    post.likes.push(user);
+  }
+
+  
 
   post.save();
 

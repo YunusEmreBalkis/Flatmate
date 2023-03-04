@@ -64,7 +64,14 @@ const likeComments = async (req, res) => {
 
   const comment = await Comment.findOne({ _id: commentId });
   assetCheck(comment,commentId,"comment");
-  comment.likes.push(user);
+
+  if (comment.likes.includes(user)) {
+    comment.likes.splice(comment.likes.indexOf(user),1)
+  }
+  else{
+    comment.likes.push(user);
+  }
+
   comment.save();
 
   res.status(StatusCodes.OK).json({ comment });

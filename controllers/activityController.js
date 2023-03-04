@@ -68,7 +68,13 @@ const joinActivity = async (req, res) => {
 
   assetCheck(activity,activityId,"activity");
 
-  activity.whoAttend.push(user);
+  if (activity.whoAttend.includes(user)) {
+    activity.whoAttend.splice(activity.whoAttend.indexOf(user),1)
+  }
+  else{
+    activity.whoAttend.push(user);
+  }
+
 
   activity.save();
 
