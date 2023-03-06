@@ -17,6 +17,7 @@ const dormitoryRoutes = require("./routes/dormitoryRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes")
+const foodlistRoutes = require("./routes/foodListRoutes");
 
 
 //Middleware
@@ -38,6 +39,7 @@ app.use("/api/v1/dormitory",dormitoryRoutes);
 app.use("/api/v1/activity",activityRoutes);
 app.use("/api/v1/post",postRoutes);
 app.use("/api/v1/comment",commentRoutes);
+app.use("/api/v1/foodlist",foodlistRoutes);
 
 app.use(notFound)
 app.use(errorHandleMiddleware)
