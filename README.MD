@@ -89,5 +89,8 @@ create model,controller,router, app.js --- postman tests
 Foodlist
 create model,controller,router, app.js --- postman tests
 
+Laundry
+create model,controller,router, app.js --- postman tests
+
 
  

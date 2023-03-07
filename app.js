@@ -16,9 +16,9 @@ const userRoutes = require("./routes/userRoutes");
 const dormitoryRoutes = require("./routes/dormitoryRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const postRoutes = require("./routes/postRoutes");
-const commentRoutes = require("./routes/commentRoutes")
+const commentRoutes = require("./routes/commentRoutes");
 const foodlistRoutes = require("./routes/foodListRoutes");
-
+const laundryRoutes = require("./routes/laundryRoutes");
 
 //Middleware
 const notFound = require("./middleware/not-found");
@@ -40,6 +40,7 @@ app.use("/api/v1/activity",activityRoutes);
 app.use("/api/v1/post",postRoutes);
 app.use("/api/v1/comment",commentRoutes);
 app.use("/api/v1/foodlist",foodlistRoutes);
+app.use("/api/v1/laundry",laundryRoutes);
 
 app.use(notFound)
 app.use(errorHandleMiddleware)
