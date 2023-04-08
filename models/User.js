@@ -32,6 +32,18 @@ const UserSchema = new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:"Dormitory",
         //required:true
+    },
+    flat:{
+        type:Number
+    },
+    room:{
+        type:Number
+    },
+    nextClean:{
+        type:Boolean
+    },
+    lastClean:{
+        type:Boolean
     }
 });
 

@@ -4,7 +4,7 @@ const { StatusCodes } = require("http-status-codes");
 const { attachCookiesToResponse, createtokenUser} = require("../utils")
 
 const register = async (req,res) =>{
-    const {name,email,password} = req.body;
+    const {name,email,password,flat} = req.body;
     const emailAlreadyExists = await User.findOne({email});
     if (emailAlreadyExists) {
         throw new CustomError.BadRequestError("Email already exist");
@@ -13,7 +13,7 @@ const register = async (req,res) =>{
     const isFirstAccount = (await User.countDocuments({})) === 0;
     const role = isFirstAccount ? "admin" : "user";
 
-    const user = await User.create({email,name,password,role}); 
+    const user = await User.create({email,name,password,role,flat}); 
     const tokenUser = createtokenUser(user)
     attachCookiesToResponse({res,user:tokenUser})
    

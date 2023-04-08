@@ -92,5 +92,8 @@ create model,controller,router, app.js --- postman tests
 Laundry
 create model,controller,router, app.js --- postman tests
 
+Clean
+create model,controller,router, app.js --- postman tests
+
 
  
