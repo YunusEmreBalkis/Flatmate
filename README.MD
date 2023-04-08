@@ -1,99 +1,24 @@
+# FlatMate - Dormitory Management and Social Media Application
 
-[] nodemon install
-[] express install and start function
-[] mongodb create
-[] connectjs
-[] import 'dotenv' and setup package ( for .env file)
-[] error-handle and not found middleware
+FlatMate - Dormitory Management and Social Media Application
+FlatMate is a web-based application designed to streamline dormitory management and foster a sense of community among housemates. The application provides various features including dormitory management, washing machine control, and social media functionality, all in one platform. This README file provides an overview of the application and instructions on how to set it up and use its features.
 
-[morgan package]
+## Features
 
-###User Model
+### Dormitory Management
+FlatMate allows housemates to easily manage various aspects of dormitory living. Housemates can create accounts, join their dormitory, and manage their personal profiles. They can also post announcements, create and view events.
 
-- [] create models folder and User.js file
-- [] validator install
-- [] create schema with name,email, password (all type:String)
-- [] export mongoose model
-
-- []dormitory model
+### Washing Machine Control
+FlatMate simplifies the process of using the dormitory's washing machine. Housemates can reserve time slots for using the washing machine, check the availability of the machine.
 
 
-#### Auth Routes Structure
-
-- [x] create controllers folder
-- [x] add authController file
-- [x] export (register,login,logout) functions
-- [x] res.send('some string value')
-- [x] create routes folder
-- [x] setup authRoutes file
-- [x] import all controllers
-- [x] setup three routes
-- [x] post('/register') post('/login') get('/logout')
-- [x] import authRoutes as authRouter in the app.js
-- [x] setup app.use('/api/v1/auth', authRouter)
-
-#### Register Controller
-
-- [x] create user
-- [x] send response with entire user (only while testing)
-- [x] check if email already in use (schema and controller)
-- [x] ignore 'role'
-- [x] alternative 'admin' setup
+### Social Media Functionality
+FlatMate provides a social media platform exclusively for the housemates of the dormitory. Housemates can create posts, share updates, and interact with each other through comments and likes. They can also create and join activities to further connect with their fellow housemates .
 
 
-#### Hash
-
-bcryptjs install
-userchema pre function = create salt and hash
-userchema methods = compare passwords
-
-create utils folder
-create jwt.js index.js
-create createJWT(jsonwebtoken install), isTokenValid,attachCookiesToResponse functions in jwt.js
-call   attachCookiesToResponse and token in authController
-app.use(cookieParser(process.env.JWT_SECRET));
-
-
-create authentication.js(authenticateUser,authhorizePermissions,) as a middleware
-create tokenUser in utils after add index.js
-create checkPermissions in utils after add index.js
-
- [x] add userController file
-- [x] export (getAllUsers,getSingleUser,showCurrentUser,updateUser,updateUserPassword) functions
-- [x] setup userRoutes file
-- [x] import all controllers
-- [x] setup just  route - router.route('/').get(getAllUsers);
-- [x] import userRoutes as userRouter in the app.js
-- [x] setup app.use('/api/v1/users', userRouter)
-
-
-
-
-
--------------------------------------------------------- AUTH COMPLETE ----------------------------------------------------
-
-
-
-Dormitory 
-create model,controller,router, app.js --- postman tests
-
-Activities
-create model,controller,router, app.js --- postman tests
-
-Post
-create model,controller,router, app.js --- postman tests
-
-Comment
-create model,controller,router, app.js --- postman tests
-
-Foodlist
-create model,controller,router, app.js --- postman tests
-
-Laundry
-create model,controller,router, app.js --- postman tests
-
-Clean
-create model,controller,router, app.js --- postman tests
-
-
- 
+## Installation and Setup
+1. Clone the FlatMate repository from GitHub.
+2. Install the required dependencies by running npm install in the project directory.
+3. Set up the database with your variables.
+4. Run the application using a local development server by running npm start in the project directory.
+5. Access the Flatmate application through a web browser using the specified URL.
