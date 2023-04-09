@@ -1,6 +1,5 @@
 # FlatMate - Dormitory Management and Social Media Application
 
-FlatMate - Dormitory Management and Social Media Application
 FlatMate is a web-based application designed to streamline dormitory management and foster a sense of community among housemates. The application provides various features including dormitory management, washing machine control, and social media functionality, all in one platform. This README file provides an overview of the application and instructions on how to set it up and use its features.
 
 ## Features
