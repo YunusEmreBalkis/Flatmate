@@ -43,6 +43,7 @@ app.use(mongoSanatize())
 app.use(express.json())
 app.use(morgan("tiny"));
 app.use(cookieParser(process.env.JWT_SECRET));
+app.use(express.static("./public"))
 
 
 app.get("/api/v1",(req,res) => {
