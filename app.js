@@ -7,7 +7,7 @@ const app = express();
 const connectDb = require("./db/connect")
 
 //rest of packages
-const morgan = require("morgan");
+
 const cookieParser = require("cookie-parser")
 const rateLimiter = require("express-rate-limit")
 const helmet = require("helmet")
