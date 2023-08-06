@@ -58,7 +58,7 @@ const deleteActivity = async (req, res) => {
   await activity.remove();
   res.status(StatusCodes.OK).json({ msg: "Succes! Activity removed" });
 };
-
+ 
 const joinActivity = async (req, res) => {
   const user = req.user.userId;
 
